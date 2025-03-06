@@ -12,3 +12,4 @@ use test;
 
 Просмотр список таблиц
 show tables;
+
