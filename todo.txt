@@ -1,0 +1,14 @@
+Подключиться к БД в консоли
+mysql -uroot -ppassword
+
+Посмотреть список БД
+show databases;
+
+Создать БД
+create database blog1;
+
+Выбор таблицы
+use test;
+
+Просмотр список таблиц
+show tables;
