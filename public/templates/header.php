@@ -23,6 +23,8 @@ $title = 'Album example666';
 
     <!-- Bootstrap core CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- styles for this template "add" -->
+    <link href="/css/sign-in.css" rel="stylesheet">
 
     <meta name="theme-color" content="#7952b3">
 
@@ -119,6 +121,11 @@ $title = 'Album example666';
 
         .bd-mode-toggle .dropdown-menu .active .bi {
             display: block !important;
+        }
+
+        /* for add */
+        .form-signin {
+            max-width: 420px;
         }
     </style>
 
