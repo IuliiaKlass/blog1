@@ -11,7 +11,7 @@ include_once "templates/header.php"; // Подключаем header
             <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
             <div class="form-floating">
-                <input type="text" name="email" class="form-control" value="" id="email" placeholder="name@example.com">
+                <input type="email" name="email" class="form-control" value="" id="email" placeholder="name@example.com">
                 <label for="floatingInput">Email address</label>
             </div>
 

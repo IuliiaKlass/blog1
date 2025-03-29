@@ -1,10 +1,10 @@
 <?php
 /**
- * @var $mysqli // определяем, что данная переменная существует
+ * @var $pdo // определяем, что данная переменная существует
  * @var $email
  */
 
-$user = checkUser($mysqli); // подключаем ф-ю из helpers на проверку юзера из БД
+$user = checkUser($pdo); // подключаем ф-ю из helpers на проверку юзера из БД
 
 
 if (count($_POST) > 0) {
@@ -12,8 +12,11 @@ if (count($_POST) > 0) {
     $surname = $_POST['surname'] ?? null;
     $phone = $_POST['phone'] ?? null;
     $about = $_POST['about'] ?? null;
-    $mysqli->query("UPDATE user SET name = '" . $name . "', surname = '" . $surname . "', phone = '" . $phone . "', about = '" . $about . "' WHERE id = '". $user['id'] ."'  ");
-    header("location: /?act=add");
+
+    $stmt = $pdo->prepare("UPDATE user SET name = ?, surname = ?, phone = ?, about = ? WHERE id = ?");
+    $stmt->execute([$name, $surname, $phone, $about, $_SESSION['userId']]);
+
+    redirect('/?act=add');
     die();
 }
 

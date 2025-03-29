@@ -18,7 +18,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <?php while($row = $result->fetch_assoc()) :?>
+                <?php while($row = $stmt->fetch()) :?>
                 <tr>
                     <th scope="row"><?=$row['id']?></th>
                     <td><img src="/images/<?=$row['img']?>" alt=""></td>
@@ -28,7 +28,7 @@
                         <a class="btn btn-danger" href="/?act=delete&id=<?=$row['id']?>" role="button">Delete</a></td>
                 </tr>
                 <?php endwhile; ?>
-                <?php if ($result->num_rows === 0) : ?>
+                <?php if ($stmt->rowCount() === 0) : ?>
                     <tr>
                         <td colspan="4">Not found</td> <!-- если нет статей выводить данный текст -->
                     </tr>

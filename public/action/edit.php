@@ -1,15 +1,15 @@
 <?php
 /**
- * @var $mysqli // определяем, что данная переменная существует
+ * @var $pdo // определяем, что данная переменная существует
  * @var $email
  * @var $userId
  */
 
-$user = checkUser($mysqli); // подключаем ф-ю из helpers на проверку юзера из БД
+$user = checkUser($pdo); // подключаем ф-ю из helpers на проверку юзера из БД
 
 $id = $_GET['id'] ?? null;
 if (!$id) {
-    header("location: /?act=articles");
+    redirect('/?act=articles');
     die();
 }
 
@@ -25,16 +25,18 @@ if (count($_POST) > 0) {
 
     $title = strip_tags($_POST['title'] ?? null);
     $content = strip_tags($_POST['content'] ?? null);
-    $mysqli->query("UPDATE article SET " . $sql . " title = '" . $title . "', content = '". $content ."' WHERE id = '" . $id . "' AND userId = '". $user['id'] ."'");
-    header("location: /?act=articles");
+    $stmt = $pdo->prepare("UPDATE article SET " . $sql . " title = ?, content = ? WHERE id = ? AND userId = ?");
+    $stmt->execute([$title, $content, $id, $user['id']]); // в execute прокидываем те переменные, которые мы поставили под вопросиком в prepare
+    redirect('/?act=articles');
     die();
 }
 
 
-$result = $mysqli->query("SELECT * from article WHERE id = '" . $id . "' AND userId = '". $user['id'] ."' LIMIT 1");
-$article = $result->fetch_assoc(); //
+$stmt = $pdo->prepare("SELECT * from article WHERE id = ? AND userId = ? LIMIT 1");
+$stmt->execute([$id, $user['id']]); // в execute прокидываем те переменные, которые мы поставили под вопросиком в prepare
+$article = $stmt->fetch(); //
 if (!$article) {
-    header("location: /?act=articles");
+    redirect('/?act=articles');
     die();
 }
 

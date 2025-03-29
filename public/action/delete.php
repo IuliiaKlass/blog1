@@ -1,19 +1,20 @@
 <?php
 /**
- * @var $mysqli // определяем, что данная переменная существует
+ * @var $pdo // определяем, что данная переменная существует
  * @var $email
  * @var $userId
  */
 
-$user = checkUser($mysqli); // подключаем ф-ю из helpers на проверку юзера из БД
-
+$user = checkUser($pdo); // подключаем ф-ю из helpers на проверку юзера из БД
 $id = $_GET['id'] ?? null;
 if (!$id) {
-    header("location: /?act=articles");
+    redirect('/?act=articles');
     die();
 }
 
-$article = getUserArticle($mysqli, $id, $userId);
+$article = getUserArticle($pdo, $id, $user['id']);
 
-$mysqli->query("DELETE FROM article WHERE id = '" . $id . "' AND userId = '". $user['id'] ."'");
-header("location: /?act=articles");
+$stmt = $pdo->prepare("DELETE FROM article WHERE id = ? AND userId = ?");
+$stmt->execute([$id, $user['id']]); // в execute прокидываем те переменные, которые мы поставили под вопросиком в prepare
+
+redirect('/?act=articles');

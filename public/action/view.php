@@ -1,10 +1,11 @@
 <?php
 /**
- * @var $mysqli // определяем, что данная переменная существует
+ * @var $pdo // определяем, что данная переменная существует
  */
 
 $id = (int)$_GET['id'];
-$result = $mysqli->query("SELECT * FROM article WHERE id = '" . $id . "'");
-$article = $result->fetch_assoc(); //
+$stmt = $pdo->prepare("SELECT * FROM article WHERE id = ?");
+$stmt->execute([$id]); // в execute прокидываем те переменные, которые мы поставили под вопросиком в prepare
+$article = $stmt->fetch();
 
 require_once 'templates/viev.php';
