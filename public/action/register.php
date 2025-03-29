@@ -1,6 +1,6 @@
  <?php
  /**
-  * @var $mysqli // определяем, что данная переменная существует
+  * @var $pdo // определяем, что данная переменная существует
   */
 
 if (count($_POST) > 0) {
@@ -10,9 +10,10 @@ if (count($_POST) > 0) {
 
     $password = password_hash($password, PASSWORD_DEFAULT); // password_hash — Создаёт хеш пароля (безопасность)
 
-    $mysqli->query("INSERT INTO user SET email = '" . $email . "', password = '" . $password . "' ");
-    header('Location: /?act=login'); // после регистрации перекидываем на другую страницу (редирект)
-    die(); // заканчиваем программу, чтоб никуда не перекинуло
+    $stmt = $pdo->prepare("INSERT INTO user SET email = ?, password = ?");
+    $stmt->execute([$email, $password]); // в execute прокидываем те переменные, которые мы поставили под вопросиком в prepare
+
+    redirect('/?act=login');
 }
 
 // подключаем шаблон к данному логическому файлу

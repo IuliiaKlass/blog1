@@ -1,34 +1,40 @@
 <?php
 
-function checkUser($mysqli) : array // возвращает массив (юзера целиком)
+function redirect(string $uri) : void
+{
+    header('Location: ' . $uri); // после сеанса перекидываем на другую страницу (редирект)
+    die(); // заканчиваем программу, чтоб никуда не перекинуло
+}
+
+// ---------------------
+function checkUser($pdo) : array // возвращает массив (юзера целиком)
 {
     // запретить использование страницы профайл пользователям, которые не авторизованы
     if (empty($_SESSION['userId'])) {
-        header("location: /?act=login"); // иначе перекидывать на страницу авторизации
-        die();
+        redirect('/?act=login');
     }
 
     $userId = (int)$_SESSION['userId'];
 // получаем пользователя из базы:
-    $result = $mysqli->query("SELECT * FROM user WHERE id = '" . $userId . "' LIMIT 1");
-    $user = $result->fetch_assoc(); //
+    $stmt = $pdo->prepare("SELECT * FROM user WHERE id = ? LIMIT 1");
+    $stmt->execute([$userId]); // в execute прокидываем те переменные, которые мы поставили под вопросиком в prepare
+    $user = $stmt->fetch(); //
 
     if (!$user) {
-        header("location: /?act=login"); // иначе перекидывать на страницу авторизации
-        die();
+        redirect('/?act=login');
     }
 
     return $user;
 }
 
 //------------------
-function getUserArticle($mysqli, int $id, int $userId) : array
+function getUserArticle($pdo, int $id, int $userId)
 {
-    $result = $mysqli->query("SELECT * FROM article WHERE id = '" . $id . "' AND userId = '" . $userId. "'");
-    $article = $result->fetch_assoc(); //
+    $stmt = $pdo->prepare("SELECT * FROM article WHERE id = ? AND userId = ?");
+    $stmt->execute([$id, $userId]);
+    $article = $stmt->fetch(); //
     if (!$article) {
-        header("location: /?act=articles");
-        die();
+        redirect('/?act=articles');
     }
     return $article;
 }

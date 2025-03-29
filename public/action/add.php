@@ -5,7 +5,7 @@
  * @var $userId
  */
 
-$user = checkUser($mysqli); // подключаем ф-ю из helpers на проверку юзера из БД
+$user = checkUser($pdo); // подключаем ф-ю из helpers на проверку юзера из БД
 $error = '';
 
 if (count($_POST) > 0) {
@@ -29,8 +29,7 @@ if (count($_POST) > 0) {
                         createdAt = NOW()
                         ";
         $mysqli->query($sql);
-        header("location: /?act=articles");
-        die();
+        redirect('/?act=articles');
     }
     }
 
